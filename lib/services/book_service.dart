@@ -4,10 +4,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:books_demo/common/models/response_model/response_model.dart';
+import 'package:books_demo/core/toastr/toastr_strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../common/constants/service_needs.dart';
+import '../core/toastr/toastr.dart';
 import '../mvvm/models/book_model/book_model.dart';
 
 class BookService {
@@ -16,30 +18,32 @@ class BookService {
   BookService._internal();
 
   Future<List<BookModel>> getBooks() async {
-    http.Response response = await http
-        .get(Uri.parse(ServiceNeeds.baseUri + ServicePaths.books.path));
+    final String url = ServiceNeeds.baseUri + ServicePaths.books.path;
+
+    http.Response response = await http.get(Uri.parse(url));
 
     debugPrint(response.statusCode.toString());
 
     if (response.statusCode == HttpStatus.ok) {
-      ResponseModel responseModel = ResponseModel();
+      List<BookModel> books = await compute(_jsonParser, response);
 
-      await compute(_jsonParser, response)
-          .then((value) => responseModel = value);
-
-      return responseModel.data!
-          .map((e) => BookModel.fromJson(e))
-          .toList()
-          .cast<BookModel>();
+      return books;
     } else {
-      throw Exception('Failed to load books');
+      Toastr.buildErrorToast(ToastrStrings.FAILED_TO_LOAD_BOOKS);
+
+      throw Exception(ToastrStrings.FAILED_TO_LOAD_BOOKS);
     }
   }
 
-  Future<ResponseModel> _jsonParser(http.Response response) async {
-    await Future.delayed(const Duration(seconds: 3));
+  Future<List<BookModel>> _jsonParser(http.Response response) async {
     ResponseModel responseModel =
         ResponseModel.fromJson(jsonDecode(response.body));
-    return responseModel;
+
+    List<BookModel> books = responseModel.data!
+        .map((e) => BookModel.fromJson(e))
+        .toList()
+        .cast<BookModel>();
+
+    return books;
   }
 }
