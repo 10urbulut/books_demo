@@ -1,4 +1,5 @@
-import 'package:books_demo/mvvm/view_models/theme_view_model.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:books_demo/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +7,10 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
 
 import 'common/constants/providers.dart';
+import 'common/constants/theme/common_theme_constants.dart';
 import 'common/constants/theme/project_dark_theme.dart';
 import 'common/constants/theme/project_light_theme.dart';
+import 'mvvm/view_models/theme_view_model.dart';
 
 class RunMyApp extends StatelessWidget {
   final _router = AppRouter();
@@ -21,10 +24,12 @@ class RunMyApp extends StatelessWidget {
           return MaterialApp.router(
             builder: (context, widget) => ResponsiveWrapper.builder(
                 ClampingScrollWrapper.builder(context, widget!),
-                breakpoints: const [
-                  ResponsiveBreakpoint.autoScale(600, name: TABLET),
-                  ResponsiveBreakpoint.resize(800, name: DESKTOP),
-                  ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
+                breakpoints: [
+                  const ResponsiveBreakpoint.autoScale(600, name: TABLET),
+                  ResponsiveBreakpoint.resize(CommonThemeConstants.tablet,
+                      name: DESKTOP),
+                  ResponsiveBreakpoint.autoScale(CommonThemeConstants.bigScreen,
+                      name: XL),
                 ]),
             routeInformationParser: _router.defaultRouteParser(),
             routerDelegate: _router.delegate(),
@@ -36,4 +41,6 @@ class RunMyApp extends StatelessWidget {
       ),
     );
   }
+
+  String get XL => 'XL';
 }
