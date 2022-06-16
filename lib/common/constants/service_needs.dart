@@ -10,7 +10,7 @@ extension ServicePathExtension on ServicePaths {
   String get path {
     switch (this) {
       case ServicePaths.books:
-        return "books";
+        return "books?_quantity=100";
     }
   }
 }
