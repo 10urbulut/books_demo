@@ -1,3 +1,4 @@
+import 'package:books_demo/common/constants/theme/common_theme_constants.dart';
 import 'package:books_demo/mvvm/views/widgets/book_list_item.dart';
 import 'package:books_demo/mvvm/views/widgets/book_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,14 @@ class BooksView extends StatefulWidget {
 class _BooksViewState extends State<BooksView> {
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width);
+    debugPrint("Screen width: ${MediaQuery.of(context).size.width}");
     return Scaffold(
       appBar: _appBar,
       body: CommonMethods.checkServiceStatusAndReturnWidget(
         status: context.watch<BookViewModel>().bookStatus,
         loadedWidget: context.watch<BookViewModel>().books == null
             ? const LoadingWidget()
-            : MediaQuery.of(context).size.width > 800
+            : MediaQuery.of(context).size.width > CommonThemeConstants.tablet
                 ? _forBigView(context)
                 : _forMobileView(context),
       ),
@@ -36,9 +37,7 @@ class _BooksViewState extends State<BooksView> {
 
   ListView _forMobileView(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width / 70,
-          vertical: MediaQuery.of(context).size.width / 40),
+      padding: _listPadding(context),
       addAutomaticKeepAlives: true,
       children: context
           .watch<BookViewModel>()
@@ -49,6 +48,12 @@ class _BooksViewState extends State<BooksView> {
               ))
           .toList(),
     );
+  }
+
+  EdgeInsets _listPadding(BuildContext context) {
+    return EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width / 70,
+        vertical: MediaQuery.of(context).size.width / 40);
   }
 
   GridView _forBigView(BuildContext context) {
@@ -58,9 +63,7 @@ class _BooksViewState extends State<BooksView> {
         crossAxisSpacing: MediaQuery.of(context).size.width / 50,
         mainAxisExtent: 170 * MediaQuery.of(context).devicePixelRatio,
       ),
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width / 70,
-          vertical: MediaQuery.of(context).size.width / 40),
+      padding: _listPadding(context),
       addAutomaticKeepAlives: true,
       children: context
           .watch<BookViewModel>()
@@ -73,18 +76,19 @@ class _BooksViewState extends State<BooksView> {
     );
   }
 
-  AppBar get _appBar => AppBar(
-        title: BookTextWidget(TitleStrings.BOOKS),
-        actions: [
-          Tooltip(
-            message: TooltipStrings.CHANGE_THE_THEME,
-            child: Switch(
-              value: context.watch<ThemeViewModel>().selectedTheme,
-              onChanged: (value) {
-                context.read<ThemeViewModel>().setSelectedTheme = value;
-              },
-            ),
-          )
-        ],
-      );
+  AppBar get _appBar {
+    return AppBar(
+      title: BookTextWidget(TitleStrings.BOOKS),
+      actions: [
+        Tooltip(
+          message: TooltipStrings.CHANGE_THE_THEME,
+          child: Switch(
+            value: context.watch<ThemeViewModel>().selectedTheme,
+            onChanged: (value) =>
+                context.read<ThemeViewModel>().setSelectedTheme = value,
+          ),
+        )
+      ],
+    );
+  }
 }
