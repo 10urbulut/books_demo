@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:books_demo/mvvm/books/widgets/books_tab_view.dart';
 import 'package:flutter/material.dart';
 
-import '../mvvm/books/views/book_detail_view.dart';
-import '../mvvm/books/views/books_view.dart';
+import '../mvvm/views/book_detail_view.dart';
+import '../mvvm/views/books_view.dart';
+import '../mvvm/views/widgets/books_tab_view.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: "View,Route",
