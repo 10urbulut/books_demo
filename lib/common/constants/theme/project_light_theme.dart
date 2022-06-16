@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../theme/common_theme_constants.dart';
 
 class ProjectLightTheme {
   static ThemeData get theme {
     return ThemeData(
+      splashColor: Colors.amber,
       scaffoldBackgroundColor: Colors.red.shade200,
       appBarTheme: _appbarTheme,
+      listTileTheme: _listTileThemeData,
       cardTheme: _cardTheme,
+      tooltipTheme: _tooltipTheme,
       dividerColor: Colors.white54,
       progressIndicatorTheme: _progressIndicatorTheme,
       bottomNavigationBarTheme: _bottomNavigationBarTheme,
       tabBarTheme: _tabBarTheme,
+      focusColor: Colors.white,
+    );
+  }
+
+  static TooltipThemeData get _tooltipTheme {
+    return TooltipThemeData(
+      decoration: BoxDecoration(
+        color: Colors.orange.shade700,
+        borderRadius:
+            BorderRadius.circular(CommonThemeConstants.generalCircular),
+      ),
+    );
+  }
+
+  static ListTileThemeData get _listTileThemeData {
+    return ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(CommonThemeConstants.generalCircular),
+      ),
     );
   }
 
@@ -31,9 +57,16 @@ class ProjectLightTheme {
 
   static AppBarTheme get _appbarTheme {
     return AppBarTheme(
+      scrolledUnderElevation: 15,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       centerTitle: true,
       color: Colors.red.shade900,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(CommonThemeConstants.appBarCircular),
+          bottomRight: Radius.circular(CommonThemeConstants.appBarCircular),
+        ),
+      ),
       elevation: 5,
     );
   }
