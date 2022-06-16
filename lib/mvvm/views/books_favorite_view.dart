@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:books_demo/mvvm/views/widgets/book_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,14 +25,11 @@ class _BooksFavoriteViewState extends State<BooksFavoriteView> {
       body: CommonMethods.checkServiceStatusAndReturnWidget(
         status: BookStatus.loaded,
         loadedWidget: context.watch<BookViewModel>().booksFavorite.isEmpty
-            ? const Center(
-                child: Text(
-                'No books favorite',
-                textScaleFactor: 2,
-              ))
+            ? _noBooksFavoriteTextFieldWithCenter
             : Consumer<BookViewModel>(
                 builder: (context, viewModel, child) {
                   return ReorderableListView.builder(
+                    header: _header,
                     padding: _padding(context),
                     itemCount: viewModel.booksFavorite.length,
                     onReorder: (oldIndex, newIndex) =>
@@ -49,6 +48,26 @@ class _BooksFavoriteViewState extends State<BooksFavoriteView> {
     );
   }
 
+  Column get _header {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Text(EXPLAIN_REORDERABLE_LIST_FEATURE, textScaleFactor: 1.2),
+        ),
+        const Divider(color: Colors.transparent),
+      ],
+    );
+  }
+
+  Center get _noBooksFavoriteTextFieldWithCenter {
+    return Center(
+        child: Text(
+      NO_BOOKS_FAVORITE,
+      textScaleFactor: 1.5,
+    ));
+  }
+
   AppBar get _appBar =>
       AppBar(title: BookTextWidget(TitleStrings.FAVORITE_BOOKS));
 
@@ -57,4 +76,8 @@ class _BooksFavoriteViewState extends State<BooksFavoriteView> {
         horizontal: MediaQuery.of(context).size.width / 70,
         vertical: MediaQuery.of(context).size.width / 40);
   }
+
+  String get EXPLAIN_REORDERABLE_LIST_FEATURE =>
+      "The list is reorderable. If you hold the press, you'll see";
+  String get NO_BOOKS_FAVORITE => 'No books favorite';
 }
