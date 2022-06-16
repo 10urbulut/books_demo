@@ -4,5 +4,5 @@ class TitleStrings {
   static const String BOOKS = "Books";
   static const String BOOK_DETAIL = "Book Detail";
 
-  static const String FAVORITE_BOOKS = "Favorite Book";
+  static const String FAVORITE_BOOKS = "Favorite Books";
 }
